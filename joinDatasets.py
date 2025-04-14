@@ -28,6 +28,8 @@ def main():
         .config("spark.driver.extraClassPath", "/home/orhankocak_0233/501-main/sqlite-jdbc-3.49.1.0.jar") \
         .config("spark.jars", "/home/orhankocak_0233/501-main/sqlite-jdbc-3.49.1.0.jar") \
         .getOrCreate()
+    
+    spark.conf.set("spark.sql.debug.maxToStringFields", 1000)
 
     # Read SWITRS collisions from SQLite
     switrs_df = spark.read \
@@ -36,7 +38,7 @@ def main():
         .option("dbtable", args.table) \
         .option("driver", "org.sqlite.JDBC") \
         .load()
-
+    
     # Read LargeST metadata from CSV
     meta_df = spark.read.csv(args.meta_csv, header=True, inferSchema=True)
 
