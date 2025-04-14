@@ -18,7 +18,7 @@ def main():
     parser.add_argument("--table", type=str, default="collisions", help="Table name inside SQLite file")
     parser.add_argument("--meta_csv", type=str, required=True, help="Path to LargeST metadata CSV file")
     parser.add_argument("--output", type=str, help="Output path for joined data (Parquet format)")
-    parser.add_argument("--distance", type=int, default=100, help="Maximum distance in meters for spatial join")
+    parser.add_argument("--distance", type=int, default=1000, help="Maximum distance in meters for spatial join")
 
     args = parser.parse_args()
 
