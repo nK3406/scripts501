@@ -25,7 +25,7 @@ def main():
     # Spark session
     spark = SparkSession.builder \
         .appName("Join SWITRS and LargeST metadata") \
-        .config("spark.driver.extraClassPath", "/usr/share/java/sqlite-jdbc.jar") \
+        .config("spark.driver.extraClassPath", "~/501-main/sqlite-jdbc-3.49.1.0.jar") \
         .getOrCreate()
 
     # Read SWITRS collisions from SQLite
