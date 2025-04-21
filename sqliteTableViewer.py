@@ -29,17 +29,33 @@ def preview_table(db_path, table_name, rows):
     except Exception as e:
         print(f"Hata oluştu: {e}")
 
+def save_preview_to_csv(db_path, table_name, filename=""):
+    try:
+        conn = sqlite3.connect(db_path)
+        query = f"SELECT * FROM {table_name} LIMIT 10"
+        df = pd.read_sql_query(query, conn)
+        if not filename:
+            filename = f"{table_name}_preview.csv"
+        df.to_csv(filename, index=False)
+        print(f"\nİlk 10 satır '{filename}' dosyasına kaydedildi.")
+        conn.close()
+    except Exception as e:
+        print(f"Hata oluştu: {e}")
+
 def main():
-    parser = argparse.ArgumentParser(description='SQLite veritabanındaki bir tabloyu önizle veya sütunlarını listele.')
-    parser.add_argument('--db', type=str, required=True, help='SQLite veritabanı dosyasının yolu (.sqlite/.db)')
-    parser.add_argument('--table', type=str, required=True, help='Görüntülenecek tablo adı')
+    parser = argparse.ArgumentParser(description='SQLite veritabanındaki bir tabloyu önizle, sütunları listele veya CSV olarak kaydet.')
+    parser.add_argument('--db', type=str, default='/home/orhankocak_0233/501-main/swit', help='SQLite veritabanı dosyasının yolu (.sqlite/.db)')
+    parser.add_argument('--table', type=str, required=False, default='collisions', help='Görüntülenecek tablo adı')
     parser.add_argument('--rows', type=int, default=5, help='Gösterilecek satır sayısı (varsayılan: 5)')
     parser.add_argument('--columns', action='store_true', help='Sadece sütun adlarını listele')
+    parser.add_argument('--save', action='store_true', help='İlk 10 satırı CSV dosyasına kaydet')
 
     args = parser.parse_args()
 
     if args.columns:
         list_columns(args.db, args.table)
+    elif args.save:
+        save_preview_to_csv(args.db, args.table)
     else:
         preview_table(args.db, args.table, args.rows)
 
